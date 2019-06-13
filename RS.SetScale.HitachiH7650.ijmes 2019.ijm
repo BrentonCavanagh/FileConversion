@@ -1,5 +1,5 @@
 //Input and output directory
-#@File (label="Files to analyse",style="directory") dir1
+#@File (label="Files to resave",style="directory") dir1
 #@String(label="File type", choices={".png",".tif",},value=".tif") FileType
 #@String(label="Create Cropped Image", description="Removes the text below the image", choices={"Yes","No",},value="Yes", style="radioButtonHorizontal") Cropped
 #@String(label="Create CLAHE Image", description="Creates a enhanced local contrast image", choices={"Yes","No",},value="No", style="radioButtonHorizontal") CLAHE
@@ -9,7 +9,7 @@ count = 0;
 list = getFileList(dir1);
 setBatchMode(true);
 
-//List of scales
+//List of scaling information for each magnification
 List.set("700", "0.007882");
 List.set("1000", "0.0112605");
 List.set("1200", "0.013513");
@@ -38,8 +38,6 @@ List.set("120000", "1.351");
 List.set("150000", "1.689");
 List.set("200000", "2.252");
 
-// List.get("25000"); 
-   
 //Loop through files names in Source folder
 for (i=0; i<list.length; i++) {
 	filename =  dir1+File.separator+list[i];
@@ -48,7 +46,7 @@ for (i=0; i<list.length; i++) {
 		run("Bio-Formats Importer", "open=["+filename+"] color_mode=Default view=Hyperstack");
  	 	mag = getInfo("Magnification");
  	 	title = getInfo("Sample Name");
- 	 	//faulty file names fix
+ 	 	//Optional faulty file names fix
  	 	//title = replace(title, "\\W", "");
  	 	print(title);
  	 	name = File.nameWithoutExtension;
@@ -61,6 +59,7 @@ for (i=0; i<list.length; i++) {
 			run("Crop");
 			saveAs("tiff", dir1+File.separator+title+"_"+mag+"x_"+name);
 		}
+		//Option to create a contrast enhanced image
 		if (CLAHE == "Yes"){
 			run("Enhance Local Contrast (CLAHE)", "blocksize=127 histogram=256 maximum=2.50 mask=*None* fast_(less_accurate)");
 			saveAs("tiff", dir1+File.separator+title+"_"+mag+"x_"+name+"_CLAHE");
@@ -73,4 +72,4 @@ for (i=0; i<list.length; i++) {
 Notification = "Finished resaving "+count+" Images";
 #@OUTPUT String  Notification
 
-//Script updated by Brenton Cavanagh 20180704
+//Script updated by Brenton Cavanagh 20190613
