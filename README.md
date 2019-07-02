@@ -5,7 +5,7 @@ A series of tools to aid the convesion of various complicated or obsolete micros
 These scripts are designed to be run in FIJI on single folders of file that require conversion to TIF.
 
 # Getting Started
-Install FIJI from http://fiji.sc/Download
+Install FIJI from https://fiji.sc/
  - unzip
  - run ImageJ-win64.exe
 
