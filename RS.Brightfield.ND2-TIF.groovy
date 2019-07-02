@@ -24,17 +24,18 @@ dirIN.eachFileRecurse { file ->
 	savename =  dirOUT.path+File.separator+file.name
     //open if file type is ND2
     if (filename.endsWith(".nd2")){
-    	//Bioformats options
-    	options = new ImporterOptions();
-		options.setId(filename);
-		options.setAutoscale(false);
-		options.setColorMode("Custom")
-		options.setCustomColor(0,0,Color.BLUE)
-		options.setCustomColor(0,1,Color.green)
-		options.setCustomColor(0,2,Color.red)
-    	//Open image
-    	imp = BF.openImagePlus(options)
-    	imp = imp[0]
+		//Bioformats options
+		options = new ImporterOptions();
+			options.setId(filename);
+			options.setAutoscale(false);
+			options.setColorMode("Custom")
+			options.setCustomColor(0,0,Color.BLUE)
+			options.setCustomColor(0,1,Color.green)
+			options.setCustomColor(0,2,Color.red)
+		ij.log("Resaving "+file.name);
+		//Open image
+		imp = BF.openImagePlus(options)
+		imp = imp[0]
 		imp.setDisplayMode(IJ.COMPOSITE);
 		imp.flattenStack();
 		//Save image
@@ -42,11 +43,10 @@ dirIN.eachFileRecurse { file ->
 		imp.close()
 		//add to number of images proccessed
 		count++
-		print("Processed "+filename);
-	}
+    }
 }
 //Notify user that script is finished
-Notification = "Finished resaving "+count+" Images"
-#@OUTPUT String  Notification
+ij.log("")
+ij.log("Finished resaving "+count+" images")
 
-//Script updated by Brenton Cavanagh 20180704
+//Script updated by Brenton Cavanagh 20190702
