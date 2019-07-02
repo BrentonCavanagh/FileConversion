@@ -9,4 +9,4 @@ Install FIJI from https://fiji.sc/
  - unzip
  - run ImageJ-win64.exe
 
-Drag and drop the respective Script into the main window of FIJI. use 'RUN' in the new window to start the script & follow the prompts.
+Drag and drop the respective Script into the main window of FIJI. Use 'RUN' in the new window to start the script & follow the prompts.
