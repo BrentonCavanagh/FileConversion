@@ -22,8 +22,8 @@ count = 0
 dirIN.eachFileRecurse { file ->    
 	filename =  dirIN.path+File.separator+file.name 
 	savename =  dirOUT.path+File.separator+file.name
-    //open if file type is ND2
-    if (filename.endsWith(".nd2")){
+	//open if file type is ND2
+	if (filename.endsWith(".nd2")){
 		//Bioformats options
 		options = new ImporterOptions();
 			options.setId(filename);
@@ -43,7 +43,7 @@ dirIN.eachFileRecurse { file ->
 		imp.close()
 		//add to number of images proccessed
 		count++
-    }
+    	}
 }
 //Notify user that script is finished
 ij.log("")
