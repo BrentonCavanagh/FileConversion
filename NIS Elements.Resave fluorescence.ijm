@@ -7,19 +7,24 @@
 
 //Generate user input
 #@File (label="Files to resave",style="directory") dirIN
-#@File (label="Save location",style="directory") dirOUT
+#@String(label="Saving location", description="Either save to subfolder or same folder as the ND2", choices={"Subfolder","Input Folder"},value="Input Folder", style="radioButtonHorizontal") folder
 #@String(label="Channel one", description="Set colour for channel one", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanOne
 #@String(label="Channel two", description="Set colour for channel one", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanTwo
 #@String(label="Channel three", description="Set colour for channel one", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanThree
 #@String(label="Channel four", description="Set colour for channel one", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanFour
 #@String(label="Channel five", description="Set colour for channel one", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanFive
 #@String(label="Channel six", description="Set colour for channel one", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanSix
-#@String(label="Create merged image", description="Set colour for channel one", choices={"Yes","No",},value="No", style="radioButtonHorizontal") Flatten
-#@String(label="Merged image file type", description="Set colour for channel one", choices={"PNG","TIF",},value="PNG") FileType
+#@String(label="Create PNG?", description="Save a PNG copy of the iamge", choices={"Yes","No",},value="No", style="radioButtonHorizontal") Flatten
 
 setBatchMode(true);
 count = 0;
-
+if(folder == "Input folder"){
+	dirOUT = dirIN;
+}
+else {
+	dirOUT = dirIN+File.separator+"WithScaling"+File.separator;
+	File.makeDirectory(dirOUT);
+}
 //Remove channels that are "none"
 strings = newArray(chanOne, chanTwo, chanThree, chanFour, chanFive, chanSix);
 colours = newArray();
@@ -58,9 +63,9 @@ for (i=0; i<list.length; i++) {
 				Stack.setChannel(1);
 				run("Blue");
 				Stack.setChannel(2);
-				run("Red");	
+				run("Green");	
 				Stack.setChannel(3);
-				run("Green");
+				run("Red");
 				Stack.setDisplayMode("composite");
 				run("Flatten");
 				saveAs("tiff", savename+"_BF");
@@ -75,7 +80,7 @@ for (i=0; i<list.length; i++) {
 	    //Merge open images into single image
 	    selectWindow(list[i]);
 	    getDimensions(width, height, channels, slices, frames);
-	    if (channels > 2){
+	    if (channels > 1){
 		    run("Split Channels");
 		    selectWindow("C1-"+list[i]);
 		    }
@@ -102,7 +107,7 @@ for (i=0; i<list.length; i++) {
 	    if (Flatten == "Yes"){
 	    	Stack.setDisplayMode("composite");
 			run("Flatten");
-			saveAs(FileType, savename+"_Merged");
+			saveAs("PNG", savename+"_Merged");
 	    }
 	    //cleanup
 	    run("Close All");
@@ -114,5 +119,4 @@ for (i=0; i<list.length; i++) {
 print(" ");
 print("Finished resaving "+count+" Images");
 
-
-//Script updated by Brenton Cavanagh 20190613
+//Script updated by Brenton Cavanagh 20190829
