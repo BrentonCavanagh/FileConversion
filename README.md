@@ -22,11 +22,10 @@ Scripts designed for files generated in NIS Elements V xx.xx
 
 __Leica LAS__
 
-Scripts designed for files generated in Leica LAS V 4.5
-
-Will read scaling information from .anx, .eax & .cal.xml files and apply it to the .tif image file.
+[_Apply scaling:_](./Leica%20LAS_Apply%20scaling.ijm)  is designed for files generated in Leica LAS V 4.5. It will read scaling information from .anx, .eax & .cal.xml files and apply it to the .tif image file.
 
 __Metamorph__
-
+_comming soon ..._
 
 __Hitachi H7650__
+[_Set Scale:_](./Hitachi%20H7650_Set%20scale.ijm)  is designed for .tif files generated using AMT Image Capture Engine V5.42.540a. It will read scaling information and apply it. both to the orginal file and a cropped version of the file that is renamed based on metadata present.
