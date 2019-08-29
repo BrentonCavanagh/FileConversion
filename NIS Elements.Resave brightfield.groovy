@@ -5,15 +5,23 @@
  */
  
 //Generate user input
-#@File (label="Files to analyse",style="directory") dirIN
-#@File (label="Save results here",style="directory") dirOUT
-#@String(label="File type", description="Set colour for channel one", choices={"PNG","TIF",},value="TIF") FileType
+#@File (label="Files to resave",style="directory") dirIN
+#@String(label="Saving location", description="Either save to subfolder or overwrite the original tif files", choices={"Subfolder","Input folder"},value="Input folder", style="radioButtonHorizontal") folder
 
 //Import libraries
 import ij.IJ
 import loci.plugins.BF
 import loci.plugins.in.ImporterOptions
 import java.awt.Color
+import loci.common.DebugTools
+
+if(folder == "Input folder"){
+	dirOUT = dirIN
+}
+else {
+	dirOUT = new File(dirIN.path+File.separator+"WithScaling"+File.separator)
+	dirOUT.mkdirs()
+}
 
 //Count number of images processed
 count = 0
@@ -37,16 +45,15 @@ dirIN.eachFileRecurse { file ->
     	imp = imp[0]
 		imp.setDisplayMode(IJ.COMPOSITE);
 		imp.flattenStack();
+		IJ.log("Resaving "+file.name);
 		//Save image
-		IJ.saveAs(imp, FileType, savename)
+		IJ.saveAs(imp, "Tiff", savename)
 		imp.close()
 		//add to number of images proccessed
 		count++
-		print("Processed "+filename);
-	}
+		}
 }
 //Notify user that script is finished
-Notification = "Finished resaving "+count+" Images"
-#@OUTPUT String  Notification
-
-//Script updated by Brenton Cavanagh 20180704
+IJ.log(" ");
+IJ.log("Finished resaving "+count+" Images");
+//Script updated by Brenton Cavanagh 20190829
