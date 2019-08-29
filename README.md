@@ -18,7 +18,7 @@ Scripts designed for files generated in NIS Elements V xx.xx
 
 [_Brightfield:_](./NIS Elements_Resave brighfield.groovy) Will resave all .ND2 files in a folder as a sinlge RBG .tif file with metadata.
 
-[_Fluorescence:_](./NIS Elements_Resave fluorescence.ijm) Will resave all .ND2 files in a folder as a sinlge RBG .tif file with metadata. Requires User input in the form of channel colour order.
+[_Fluorescence:_](BrentonCavanagh/FileConversion/NIS Elements_Resave fluorescence.ijm) Will resave all .ND2 files in a folder as a sinlge RBG .tif file with metadata. Requires User input in the form of channel colour order.
 
 __Leica LAS__
 
