@@ -16,7 +16,7 @@
 //#@String(label="Channel six", description="Set colour for channel six", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanSix
 #@String(label="Preview PNG?", description="Save a PNG copy of the image", choices={"Yes","No",},value="No", style="radioButtonHorizontal") Flatten
 
-//setBatchMode(true);
+setBatchMode(true);
 count = 0;
 if(folder == "Input folder"){
 	dirOUT = dirIN;
@@ -50,7 +50,7 @@ for (i=0; i<list.length; i++) {
 		print("Resaving "+list[i]);
 		getDimensions(width, height, channels, slices, frames);
 
-		if (channels > colours.length) {
+		if (channels >= colours.length) {
 					
     	// Set colours
     	for (j=0; j<colours.length; j++){
@@ -58,7 +58,6 @@ for (i=0; i<list.length; i++) {
 				run(colours[j]);
 				}
 			else if (colours[j] !="BrightField"){
-				print("setting "+colours[j]+" channel");
 				Stack.setChannel(j+1)
 				run(colours[j]);
 				Stack.setDisplayMode("composite");
@@ -66,7 +65,6 @@ for (i=0; i<list.length; i++) {
 			
 			//Create RGB Brightfield image and grayscale
 			if (colours[j] =="BrightField"){
-				print("setting BF");
 				run("Duplicate...", "duplicate channels=1-"+j);
 				rename("FL");
 				selectWindow(list[i]);
@@ -88,7 +86,6 @@ for (i=0; i<list.length; i++) {
 				rename(list[i]);  		
 	    
 			    //Merge open images into single image
-			    print("merging BF");
 			    selectWindow(list[i]);
 			    getDimensions(width, height, channels, slices, frames);
 			    if (channels > 1){
@@ -97,7 +94,6 @@ for (i=0; i<list.length; i++) {
 				    }
 			    
 			    //generate and sort list of open images
-			    print("sorting images");
 			    openArray = newArray(nImages);
 			    for (k=0; k<nImages; k++) { 
 			 		selectImage(k+1); 
@@ -109,8 +105,7 @@ for (i=0; i<list.length; i++) {
 		        	str = str +"c"+(l+1)+"=["+openArray[l]+"] "; 
 			 		}
 		     	str = str +"c"+(l+1)+"=["+openArray[openArray.length-1]+"]";
-		     	print("Merging images");	 	
-			  	run("Merge Channels...", ""+str+" create keep");
+		     	run("Merge Channels...", ""+str+" create keep");
 			}
 	    }
 	    saveAs("tiff", savename);
@@ -128,6 +123,7 @@ for (i=0; i<list.length; i++) {
 		error  = "ERROR: "+ channels + " channels found, " + colours.length + " colours assigned -- skipping";
 		print(error);
 		errors =  Array.concat(errors, list[i]);
+		run("Close All");
 		}
 	}
 }
@@ -142,4 +138,4 @@ if (errors.length != 0){
 print(" ");
 print("Finished resaving "+count+" Images");
 
-//Script updated by Brenton Cavanagh 20191107
+//Script updated by Brenton Cavanagh 20191015
