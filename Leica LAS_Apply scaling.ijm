@@ -16,9 +16,11 @@ skipped = newArray();
 reason = newArray();
 
 if(folder == "Overwrite"){
+	print("Overwrite set");
 	dir2 = dir1;
 }
 else {
+	print("Subfolder set");
 	dir2 = dir1+File.separator+"WithScaling"+File.separator;
 	File.makeDirectory(dir2);
 }
@@ -31,7 +33,7 @@ for (i=0; i<list.length; i++) {
 		open(filename);		
 		//run("Bio-Formats Importer", "open=["+filename+"] color_mode=Default view=Hyperstack");
 		shortname = File.nameWithoutExtension;
-		savename = dir2+shortname;
+		savename = dir2+File.separator+shortname;
 		fileType = newArray(".anx",".eax",".cal.xml",".txt");
 		if (File.exists(dir1+File.separator+".Metadata"+File.separator) == true){
 			caldir = dir1+File.separator+".Metadata"+File.separator;
@@ -149,5 +151,5 @@ function saveerrors(){
 	}
 }
 
-//Script updated by Brenton Cavanagh 20191119
+//Script updated by Brenton Cavanagh 20190830
     
