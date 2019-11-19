@@ -37,7 +37,7 @@ for (i=0; i<list.length; i++) {
 			caldir = dir1+File.separator+".Metadata"+File.separator;
 			}
 		else{
-			caldir = dir1+File.separator
+			caldir = dir1+File.separator;
 			}
 		
 		//check for calibration file
@@ -45,7 +45,7 @@ for (i=0; i<list.length; i++) {
 			calname = caldir+file+fileType[e];
 			ext = fileType[e];
 			if (File.exists(calname) == true){
-				print("Resaving "+ file);
+				print("Found "+ file + ext);
 		    	
 		    	//extract scaling info
 		    	s = File.openAsString(calname);
@@ -69,6 +69,7 @@ for (i=0; i<list.length; i++) {
 								}
 							e=10;
 							}
+				      }
 			           else if(ext == ".cal.xml"){
 					      	if (indexOf(line,"<XMetresPerPixel>")!=-1) {
 					      		idx1 = indexOf(line, "<XMetresPerPixel>");
@@ -101,7 +102,7 @@ for (i=0; i<list.length; i++) {
 			}
 		}
 	}
-}
+
 saveerrors();
 
 //Notify user that script is finished
@@ -148,5 +149,5 @@ function saveerrors(){
 	}
 }
 
-//Script updated by Brenton Cavanagh 20190830
+//Script updated by Brenton Cavanagh 20191119
     
