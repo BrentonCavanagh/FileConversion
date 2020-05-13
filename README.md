@@ -16,17 +16,17 @@ __Nikon NIS Elements__
 
 Scripts designed for files generated in NIS Elements V xx.xx
 
-[_Resave Brightfield:_](Nikon_NIS.Elements_Resave.brightfield.groovy) Will resave all .ND2 files in a folder as a single RBG .tif file with metadata.
+[_Resave Brightfield:_](Nikon_NIS.Elements_Resave.brightfield.groovy) Will resave each ND2 files of a folder as a single RBG TIF file with the correct metadata.
 
-[_Resave Fluorescence:_](Nikon_NIS.Elements_Resave.fluorescence.ijm) Will resave all .ND2 files in a folder as a single RBG .tif file with metadata. Requires User input in the form of channel colour order.
+[_Resave Fluorescence:_](Nikon_NIS.Elements_Resave.fluorescence.ijm) Will resave all ND2 files of a folder as a single RBG TIF file with the correct metadata. Requires the user to input the colour of individual channels in the order of acquisition.
 
 __Leica LAS__
 
-[_Apply scaling:_](Leica_LAS_Apply.Scaling.ijm) is designed for files generated in Leica LAS V3 and V4.5. It will read scaling information from .anx, .eax & .cal.xml files and apply it to the .tif image file.
+[_Apply scaling:_](Leica_LAS_Apply.Scaling.ijm) Is designed for files generated in Leica LAS V3 and V4.5. It will read scaling information from .anx, .eax & .cal.xml files and apply it to the corresponding TIF file. 
 
 __Metamorph__
 _coming soon ..._
 
 __Hitachi H7650__
 
-[_Apply Scaling:_](Hitachi_H7650_Apply.Scaling.ijm) is designed for .tif files generated using AMT Image Capture Engine V5.42.540a. It will read the scaling information present in the metadata and apply it to both the original file and a cropped version of the file.
+[_Apply Scaling:_](Hitachi_H7650_Apply.Scaling.ijm) Is designed for .tif files generated using AMT Image Capture Engine V5.42.540a on the Hitachi H7650 transmission microscope. It will read the scaling information present in the metadata and apply it to both the original and a cropped version of the file.
