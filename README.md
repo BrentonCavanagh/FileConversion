@@ -29,4 +29,4 @@ _coming soon ..._
 
 __Hitachi H7650__
 
-[_Set Scale:_](Hitachi%20H7650_Set%20scale.ijm)  is designed for .tif files generated using AMT Image Capture Engine V5.42.540a. It will read scaling information and apply it. both to the orginal file and a cropped version of the file that is renamed based on metadata present.
+[_Apply Scaling:_](Hitachi%20H7650_Apply.Scaling.ijm) is designed for .tif files generated using AMT Image Capture Engine V5.42.540a. It will read the scaling information present in the metadata and apply it to both the original file and a cropped version of the file.
