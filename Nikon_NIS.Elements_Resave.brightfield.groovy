@@ -1,12 +1,13 @@
 /*
  * Script written by Brenton Cavanagh 2018 brentoncavanagh@rcsi.ie
  * Purpose: To open and resave ND2 files from the Nikon Eclipse 90i
- * as single RGB TIF or PNG files with the collect colour order (BGR) 
+ * as single RGB TIF with the correct colour order (BGR). 
  */
  
 //Generate user input
 #@File (label="Files to resave",style="directory") dirIN
-#@String(label="Saving location", description="Either save to subfolder or overwrite the original tif files", choices={"Subfolder","Input folder"},value="Input folder", style="radioButtonHorizontal") folder
+#@String (label="Saving location", description="Either save to a subfolder, overwrite the original tif files or use a custom location", choices={"Subfolder","Input folder","Custom location"},value="Custom location", style="radioButtonHorizontal") folder
+#@File (label="Custom save locatoin",style="directory") dirOUT
 
 //Import libraries
 import ij.IJ
@@ -18,13 +19,27 @@ import loci.common.DebugTools
 if(folder == "Input folder"){
 	dirOUT = dirIN
 }
-else {
+if(folder == "Subfolder"){
 	dirOUT = new File(dirIN.path+File.separator+"WithScaling"+File.separator)
 	dirOUT.mkdirs()
 }
 
-//Count number of images processed
+//Count number of images to process and show porgress
 count = 0
+countFiles(dirIN)
+n =0
+
+function countFiles(dir) {
+      list = getFileList(dir);
+      for (i=0; i<list.length; i++) {
+          if (endsWith(list[i], "/")){
+          	folder = replace(list[i], "/", "");
+          	countFiles(""+dir+File.separator+folder);
+          	}
+          else {
+          	  count++;}
+  }
+}
 
 //Recurse images in specified folders
 dirIN.eachFileRecurse { file ->    
@@ -32,7 +47,8 @@ dirIN.eachFileRecurse { file ->
 	savename =  dirOUT.path+File.separator+file.name
     //open if file type is ND2
     if (filename.endsWith(".nd2")){
-    	//Bioformats options
+    	showProgress(n++, count);
+	    //Bioformats options
     	options = new ImporterOptions();
 		options.setId(filename);
 		options.setAutoscale(false);
@@ -49,11 +65,9 @@ dirIN.eachFileRecurse { file ->
 		//Save image
 		IJ.saveAs(imp, "Tiff", savename)
 		imp.close()
-		//add to number of images proccessed
-		count++
 		}
 }
 //Notify user that script is finished
 IJ.log(" ");
 IJ.log("Finished resaving "+count+" Images");
-//Script updated by Brenton Cavanagh 20190829
+//Script updated by Brenton Cavanagh 20200622
