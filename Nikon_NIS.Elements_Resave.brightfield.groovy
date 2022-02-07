@@ -1,7 +1,7 @@
 /*
  * Script written by Brenton Cavanagh 2018 brentoncavanagh@rcsi.ie
  * Purpose: To open and resave ND2 files from the Nikon Eclipse 90i
- * as single RGB TIF or PNG files with the collect colour order (BGR) 
+ * as single RGB TIF or PNG files with the correct colour order (BGR) 
  */
  
 //Generate user input
