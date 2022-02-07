@@ -7,24 +7,18 @@
 
 //Generate user input
 #@File (label="Files to resave",style="directory") dirIN
-#@String(label="Saving location", description="Either save to subfolder or same folder as the ND2", choices={"Subfolder","Input Folder"},value="Input Folder", style="radioButtonHorizontal") folder
+#@File (label="Files to resave",style="directory") dirOUT
 #@String(label="Channel one", description="Set colour for channel one", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanOne
 #@String(label="Channel two", description="Set colour for channel two", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanTwo
 #@String(label="Channel three", description="Set colour for channel three", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanThree
 #@String(label="Channel four", description="Set colour for channel four", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanFour
 //#@String(label="Channel five", description="Set colour for channel five", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanFive
 //#@String(label="Channel six", description="Set colour for channel six", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanSix
-#@String(label="Preview PNG?", description="Save a PNG copy of the image", choices={"Yes","No",},value="No", style="radioButtonHorizontal") Flatten
+//#@String(label="Preview PNG?", description="Save a PNG copy of the image", choices={"Yes","No",},value="No", style="radioButtonHorizontal") Flatten
 
 setBatchMode(true);
 count = 0;
-if(folder == "Input folder"){
-	dirOUT = dirIN;
-}
-else {
-	dirOUT = dirIN+File.separator+"WithScaling"+File.separator;
-	File.makeDirectory(dirOUT);
-}
+
 //Remove channels that are "none"
 //strings = newArray(chanOne, chanTwo, chanThree, chanFour, chanFive, chanSix);
 strings = newArray(chanOne, chanTwo, chanThree, chanFour);
@@ -106,15 +100,11 @@ for (i=0; i<list.length; i++) {
 			 		}
 		     	str = str +"c"+(l+1)+"=["+openArray[openArray.length-1]+"]";
 		     	run("Merge Channels...", ""+str+" create keep");
+		     	Stack.setDisplayMode("composite");
 			}
 	    }
 	    saveAs("tiff", savename);
-	    //optional creation of flattened image
-	    if (Flatten == "Yes"){
-	    	Stack.setDisplayMode("composite");
-			run("Flatten");
-			saveAs("PNG", savename+"_Merged");
-	    }
+	    
 	    //cleanup
 	    run("Close All");
 	    count++;
@@ -138,4 +128,4 @@ if (errors.length != 0){
 print(" ");
 print("Finished resaving "+count+" Images");
 
-//Script updated by Brenton Cavanagh 20191015
+//Script updated by Brenton Cavanagh 20220120
