@@ -23,6 +23,8 @@ __Leica LAS__
 
 [_Apply scaling:_](Leica_LAS_Apply.Scaling.ijm) Is designed for files generated in Leica LAS V3 and V4.5. It will read scaling information from .anx, .eax & .cal.xml files and apply it to the corresponding TIF file.
 
+[_Apply scaling to multichannel images:_](Leica_LAS_Multichannel.Apply.Scaling.ijm) Is designed for files generated in Leica LAS V3 and V4.5. It will read scaling information from .anx, .eax & .cal.xml files and apply it to the corresponding TIF file. It will also combine individual images found in each folder into multipage tif for use in FIJI.
+
 __Metamorph__
 
 [_Resave Fluorescence:_](Metamorph_Resave.fluorescence.ijm) Is designed for files generated in Metamorph. It will read scaling information and apply a LUT based on the filterset and apply it to the corresponding TIF file. 
