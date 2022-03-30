@@ -32,3 +32,7 @@ __Metamorph__
 __Hitachi H7650__
 
 [_Apply Scaling:_](Hitachi_H7650_Apply.Scaling.ijm) Is designed for .tif files generated using AMT Image Capture Engine V5.42.540a on the Hitachi H7650 transmission microscope. It will read the scaling information present in the metadata and apply it to both the original and a cropped version of the file.
+
+__Zeiss Zen__
+
+[_Zeiss_Zen_Multiscene.as.TIF:_](Zeiss_Zen_Multiscene.as.TIF.ijm) Is designed to resave multiscene CZI files from the Carl Zeiss as single channel TIF images. With the option to save each scene as a mulitpage TIF.
