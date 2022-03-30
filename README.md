@@ -35,4 +35,4 @@ __Hitachi H7650__
 
 __Zeiss Zen__
 
-[_Zeiss_Zen_Multiscene.as.TIF:_](Zeiss_Zen_Multiscene.as.TIF.ijm) Is designed to resave multiscene CZI files from the Carl Zeiss as single channel TIF images. With the option to save each scene as a mulitpage TIF.
+[_Zeiss_Zen_Multiscene.as.TIF:_](Zeiss_Zen_Multiscene.as.TIF.ijm) Is designed to resave multiscene CZI files as single channel TIF images. With the option to save each scene as a mulitpage TIF.
