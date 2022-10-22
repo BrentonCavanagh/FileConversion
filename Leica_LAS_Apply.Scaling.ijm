@@ -5,41 +5,33 @@
  * + the option to also output flattened image in TIF or PNG
  */
 
-#@File (label="Files to resave",style="directory") dir1
-#@String(label="Saving location", description="Either save to subfolder or overwrite the original tif files", choices={"Subfolder","Overwrite"},value="Subfolder", style="radioButtonHorizontal") folder
+//Script updated by Brenton Cavanagh 20221021
+
+#@File (label="Input Directory",style="directory") dirIN
+#@File (label="Save location",style="directory") dirOUT
 
 //setup
 setBatchMode(true);
-list = getFileList(dir1);
+list = getFileList(dirIN);
 count = 0;
 skipped = newArray();
 reason = newArray();
 
-if(folder == "Overwrite"){
-	print("Overwrite set");
-	dir2 = dir1;
-}
-else {
-	print("Subfolder set");
-	dir2 = dir1+File.separator+"WithScaling"+File.separator;
-	File.makeDirectory(dir2);
-}
-
 //Start of process
 for (i=0; i<list.length; i++) {
-	filename = dir1+File.separator+list[i];
+	filename = dirIN+File.separator+list[i];
 	file = list[i];
 	if (endsWith(filename, ".tif")){
 		open(filename);		
 		//run("Bio-Formats Importer", "open=["+filename+"] color_mode=Default view=Hyperstack");
 		shortname = File.nameWithoutExtension;
-		savename = dir2+File.separator+shortname;
+		savename = dirOUT+File.separator+shortname;
 		fileType = newArray(".anx",".eax",".cal.xml",".txt");
-		if (File.exists(dir1+File.separator+".Metadata"+File.separator) == true){
-			caldir = dir1+File.separator+".Metadata"+File.separator;
+		if (File.exists(dirIN+File.separator+".Metadata"+File.separator) == true){
+			caldir = dirIN+File.separator+".Metadata"+File.separator;
 			}
 		else{
-			caldir = dir1+File.separator;
+			caldir = dirIN+File.separator;
 			}
 		
 		//check for calibration file
@@ -101,9 +93,10 @@ for (i=0; i<list.length; i++) {
 			print("Calibration missing");
 			print("");
 			close();
-			}
 		}
 	}
+}
+
 
 saveerrors();
 
@@ -133,6 +126,8 @@ function apply() {
     //Apply scaling    
 	selectWindow(file);
 	run("Set Scale...", "distance=1 known="+scale+" pixel=1 unit=micron");
+	//optinal flatten
+	run("Flatten");
 	saveAs("tiff", savename);
 	close();
 	count++;
@@ -149,7 +144,8 @@ function saveerrors(){
 	      print(text, skipped[i]+"\t"+reason[i]);
 		}
 	}
+	else{
+		print("No errors found");
+	}
 }
-
-//Script updated by Brenton Cavanagh 20190830
     
