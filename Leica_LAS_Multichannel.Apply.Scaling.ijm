@@ -4,20 +4,21 @@
  *  leica LAS from ANX, XML & EAX or TXT calibration files.
  * Additionally RGB tiffs will be rearranged and composite images created.
  */
+#@File (label="Input Directory",style="directory") dirIN
+#@File (label="Save location",style="directory") dirOUT
 
-#@File (label="Files to resave",style="directory") dirIN
-//#@String(label="Saving location", description="Either save to subfolder or overwrite the original tif files", choices={"Subfolder","Overwrite"},value="Subfolder", style="radioButtonHorizontal") folder
-
-//setup
+//Setup
 setBatchMode(true);
 count = 0;
-countFiles(dirIN);
+var skipped = newArray();
+var reason = newArray();
+//countFiles(dirIN);
 n = 0;
 run("Clear Results");
 processFiles(dirIN);
-selectWindow("Results");
-saveAs("Text", dirIN+File.separator+"errorlog.csv");
+saveerrors();
 
+/*
 function countFiles(dir) {
       list = getFileList(dir);
       for (i=0; i<list.length; i++) {
@@ -29,6 +30,7 @@ function countFiles(dir) {
           	  count++;}
   }
 }
+*/
 
 function processFiles(dir) {
   list = getFileList(dir);
@@ -39,7 +41,7 @@ function processFiles(dir) {
       		processFiles(""+dir+File.separator+folder);
           	}
       else {
-         showProgress(n++, count);
+         //showProgress(n++, count);
          processFile(dir, list[i]);
        	}
       }
@@ -53,7 +55,7 @@ function processFile(dir, file) {
 		print(filename);
 		//run("Bio-Formats Importer", "open=["+filename+"] color_mode=Default view=Hyperstack");
 		shortname = File.nameWithoutExtension;
-		savename = dir+File.separator+shortname;
+		savename = dirOUT+File.separator+shortname;
 		fileType = newArray(".anx",".eax",".cal.xml",".txt");
 		if (File.exists(dir+File.separator+".Metadata"+File.separator) == true){
 			caldir = dir+File.separator+".Metadata"+File.separator;
@@ -88,10 +90,7 @@ function processFile(dir, file) {
 								print("Invalid Scale");
 								print("");
 								close();
-								setResult("Folder", nResults, folder);
-								setResult("File", nResults-1, file);	
-								setResult("Error", nResults-1, "Invalid Scale");	
-								updateResults();				
+								errortable(folder, file, "Invalid Scale");				
 								}
 							e=10;
 							}
@@ -110,10 +109,7 @@ function processFile(dir, file) {
 									print("Invalid Scale");
 									print("");
 									close();
-									setResult("Folder", nResults, folder);
-									setResult("File", nResults-1, file);	
-									setResult("Error", nResults-1, "Invalid Scale");	
-									updateResults();				
+									errortable(folder, file, "Invalid Scale");				
 									}
 							e=10;		
 							}          	
@@ -130,10 +126,7 @@ function processFile(dir, file) {
 			print("Calibration missing");
 			print("");
 			close();
-			setResult("Folder", nResults, folder);
-			setResult("File", nResults-1, file);	
-			setResult("Error", nResults-1, "Calibration missing");	
-			updateResults();
+			errortable(folder, file, "Calibration missing");
 			}
 		}
 }
@@ -150,9 +143,19 @@ function mergeFile(dir, folder, list){
 				run("Arrange Channels...", "new=1");
 				run("Red");					
 			}
+			else{
+				errortable(folder, list[i], "Channels missing");
+				if(channels > 1){
+					run("Flatten");
+					selectWindow("Red");
+					close();
+				}
+				run("16-bit");
+				run("Red");	
+			}
 			
 		}			
-		if (endsWith(list[i], "_GFP.tif")){
+		if (endsWith(list[i], "_GFP.tif") || endsWith(list[i], "_I3.tif")){
 			open(filename+list[i]);	
 			getDimensions(width, height, channels, slices, frames);
 			rename("Green");
@@ -160,7 +163,16 @@ function mergeFile(dir, folder, list){
 				run("Arrange Channels...", "new=2");
 				run("Green");
 			}
-			
+			else{
+				errortable(folder, list[i], "Channels missing");
+				if(channels > 1){
+					run("Flatten");
+					selectWindow("Green");
+					close();
+				}
+				run("16-bit");
+				run("Green");
+			}
 		}			
 		if (endsWith(list[i], "_A.tif")){
 			open(filename+list[i]);	
@@ -170,27 +182,38 @@ function mergeFile(dir, folder, list){
 				run("Arrange Channels...", "new=3");
 				run("Blue");
 			}
-			
+			else{
+				errortable(folder, list[i], "Channels missing");
+				if(channels > 1){
+					run("Flatten");
+					selectWindow("Blue");
+					close();
+				}
+				run("16-bit");
+				run("Blue");
+			}
 		}
+		
 	}
 
-//Asseble multipage tiff	
-openArray = newArray(nImages);
-if (openArray.length >= 1){
-for (k=0; k<nImages; k++) { 
-		selectImage(k+1); 
-		openArray[k] = getTitle(); 
+	//Asseble multipage tiff	
+	openArray = newArray(nImages);
+	if (openArray.length >= 1){
+		for (k=0; k<nImages; k++) { 
+			selectImage(k+1); 
+			openArray[k] = getTitle(); 
 		}
-	Array.sort(openArray);
-	str = "";
-	for (l=0; l<openArray.length-1; l++){ 
-	str = str +"c"+(l+1)+"=["+openArray[l]+"] "; 
-		}
-	str = str +"c"+(l+1)+"=["+openArray[openArray.length-1]+"]";
-
-	run("Merge Channels...", ""+str+" create");
-	saveAs("tiff", dirIN+File.separator+folder+".tif");
-}
+		Array.sort(openArray);
+		str = "";
+		for (l=0; l<openArray.length-1; l++){ 
+		str = str +"c"+(l+1)+"=["+openArray[l]+"] "; 
+			}
+		str = str +"c"+(l+1)+"=["+openArray[openArray.length-1]+"]";
+	
+		run("Merge Channels...", ""+str+" create");
+		saveAs("tiff", dirOUT+File.separator+folder+".tif");
+		count++;
+	}
 }
 
 //Notify user that script is finished
@@ -219,10 +242,38 @@ function apply() {
     //Apply scaling    
 	selectWindow(file);
 	run("Set Scale...", "distance=1 known="+scale+" pixel=1 unit=micron");
+	run("Flatten");
 	saveAs("tiff", savename);
 	close();
 	count++;
 	}
 
-//Script updated by Brenton Cavanagh 20220207
-  
+function errortable(folder, file, reasontext){
+				print("Error Found");
+				skipped = Array.concat(skipped, folder+file);
+				reason = Array.concat(reason, reasontext);
+				setResult("Folder", nResults, folder);
+				setResult("File", nResults-1, file);	
+				setResult("Error", nResults-1, reasontext);	
+				updateResults();
+}
+
+function saveerrors(){
+	//Print skipped files
+	if (skipped.length != 0){
+		print("The following "+skipped.length+" files had errors, please see the error table or errorlog.txt");
+		Array.print(skipped);
+		print("");
+		text = File.open(dirOUT+File.separator+"errorlog.txt");
+	    for (i=0; i<skipped.length; i++){
+	      print(text, skipped[i]+"\t"+reason[i]);
+		}
+		//selectWindow("Results");
+		//saveAs("Text", dirOUT+File.separator+"errorlog.csv");
+	}
+	else{
+		print("No errors found");
+	}
+}
+//Script updated by Brenton Cavanagh 20221021
+    
