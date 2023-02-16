@@ -6,8 +6,8 @@
  */
 
 //Generate user input
-#@File (label="Files to resave",style="directory") dirIN
-#@File (label="Files to resave",style="directory") dirOUT
+#@File (label="Input Directory",style="directory") dirIN
+#@File (label="Save location",style="directory") dirOUT
 #@String(label="Channel one", description="Set colour for channel one", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanOne
 #@String(label="Channel two", description="Set colour for channel two", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanTwo
 #@String(label="Channel three", description="Set colour for channel three", choices={"None","BrightField","Red","Green","Blue","Cyan","Magenta","Yellow","Grays"}, value="None") chanThree
@@ -40,7 +40,7 @@ for (i=0; i<list.length; i++) {
 	filename =  dirIN+File.separator+list[i]; 
 	savename =  dirOUT+File.separator+list[i];
     if (endsWith(filename, ".nd2")){
-    	run("Bio-Formats Importer", "open=["+filename+"] color_mode=Default view=Hyperstack");	
+    	run("Bio-Formats Importer", "open=["+filename+"] autoscale color_mode=Default view=Hyperstack");	
 		print("Resaving "+list[i]);
 		getDimensions(width, height, channels, slices, frames);
 
@@ -76,6 +76,7 @@ for (i=0; i<list.length; i++) {
 				rename("zBF");
 				run("16-bit");
 				close(list[i]);
+				close("BF");
 				selectWindow("FL");
 				rename(list[i]);  		
 	    
@@ -116,6 +117,9 @@ for (i=0; i<list.length; i++) {
 		run("Close All");
 		}
 	}
+	else{
+		print("--> Skipping "+ list[i] + ", file type incorrect.");
+	}
 }
 
 if (errors.length != 0){
@@ -128,4 +132,4 @@ if (errors.length != 0){
 print(" ");
 print("Finished resaving "+count+" Images");
 
-//Script updated by Brenton Cavanagh 20220120
+//Script updated by Brenton Cavanagh 20230216
