@@ -6,7 +6,7 @@
  */
 
 
-//Script updated by Brenton Cavanagh 20221021
+//Script updated by Brenton Cavanagh 20230512
 
 #@File (label="Input Directory",style="directory") dirIN
 #@File (label="Save location",style="directory") dirOUT
@@ -98,7 +98,7 @@ function mergelambda(dir, folder, list){
 					run("Red");					
 				}
 				else{
-					errortable(folder, file, "Channels missing");
+					//errortable(folder, file, "Channels missing");
 					if(channels > 1){
 						run("Flatten");
 						selectWindow("Red");
@@ -120,7 +120,7 @@ function mergelambda(dir, folder, list){
 					run("Green");
 				}
 				else{
-					errortable(folder, file, "Channels missing");
+					//errortable(folder, file, "Channels missing");
 					if(channels > 1){
 						run("Flatten");
 						selectWindow("Green");
@@ -142,7 +142,7 @@ function mergelambda(dir, folder, list){
 					run("Blue");
 				}
 				else{
-					errortable(folder, file, "Channels missing");
+					//errortable(folder, file, "Channels missing");
 					if(channels > 1){
 						run("Flatten");
 						selectWindow("Blue");
